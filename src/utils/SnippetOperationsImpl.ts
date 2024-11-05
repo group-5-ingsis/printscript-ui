@@ -8,9 +8,11 @@ import {TestCaseResult} from "./queries.tsx";
 
 export class SnippetOperationsImpl implements SnippetOperations{
 
-    constructor(token: string){
-    }
+  private getToken: () => Promise<string>;
 
+  constructor(getToken: () => Promise<string>) {
+    this.getToken = getToken;
+  }
 
     createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
         return Promise.resolve(undefined);
