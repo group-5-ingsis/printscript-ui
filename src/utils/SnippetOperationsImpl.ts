@@ -35,7 +35,24 @@ export class SnippetOperationsImpl implements SnippetOperations{
     }
 
     async deleteSnippet(id: string): Promise<string> {
-        return Promise.resolve("");
+      const token = await this.getToken();
+      try {
+        const response = await fetch(`http://localhost:8082/v1/snippet/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data.message;
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        return "error fetching";
+      }
     }
 
     formatSnippet(snippet: string): Promise<string> {
@@ -112,6 +129,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
     }
 
     updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet> {
+      
         return Promise.resolve(undefined);
     }
 }
