@@ -5,6 +5,7 @@ import {Rule} from "../types/Rule.ts";
 import {TestCase} from "../types/TestCase.ts";
 import {PaginatedUsers} from "./users.ts";
 import {TestCaseResult} from "./queries.tsx";
+import {BACKEND_URL} from "./constants.ts";
 
 export class SnippetOperationsImpl implements SnippetOperations{
 
@@ -14,11 +15,26 @@ export class SnippetOperationsImpl implements SnippetOperations{
     this.getToken = getToken;
   }
 
-    createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
-        return Promise.resolve(undefined);
+    async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
+      const token = this.getToken();
+      const response = await fetch(`http://localhost:8082/v1/snippet`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(createSnippet)
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      return data as Snippet;
     }
 
-    deleteSnippet(id: string): Promise<string> {
+    async deleteSnippet(id: string): Promise<string> {
         return Promise.resolve("");
     }
 
@@ -38,8 +54,25 @@ export class SnippetOperationsImpl implements SnippetOperations{
         return Promise.resolve([]);
     }
 
-    getSnippetById(id: string): Promise<Snippet | undefined> {
-        return Promise.resolve(undefined);
+    async getSnippetById(id: string): Promise<Snippet | undefined> {
+      const token = await this.getToken();
+      try {
+        const response = await fetch(`http://localhost:8082/v1/snippet/${id}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data as Snippet;
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        return undefined;
+      }
     }
 
     getTestCases(): Promise<TestCase[]> {
