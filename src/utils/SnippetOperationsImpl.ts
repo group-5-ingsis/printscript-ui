@@ -63,11 +63,31 @@ export class SnippetOperationsImpl implements SnippetOperations{
         return Promise.resolve([]);
     }
 
-    getFormatRules(): Promise<Rule[]> {
-        return Promise.resolve([]);
-    }
+  async getFormatRules(): Promise<Rule[]> {
+    const token = await this.getToken();
+    try {
+      const response = await fetch(`http://localhost:8082/v1/snippet/format/rules`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
 
-    getLintingRules(): Promise<Rule[]> {
+      if (!response.ok) {
+        console.log('Network response was not ok:', response.status);
+      }
+
+      const data = await response.json();
+      return data as Rule[];
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+      return [];
+    }
+  }
+
+
+  getLintingRules(): Promise<Rule[]> {
         return Promise.resolve([]);
     }
 
