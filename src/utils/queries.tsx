@@ -12,17 +12,23 @@ import {useEffect} from "react";
 
 
 export const useSnippetsOperations = () => {
-    const {getAccessTokenSilently} = useAuth0()
+    const { getAccessTokenSilently } = useAuth0();
 
     useEffect(() => {
-        getAccessTokenSilently()
+        getAccessTokenSilently({
+                    authorizationParams: {
+                        audience: import.meta.env.VITE_AUTH0_AUDIENCE ?? "",
+                        scope: "read:snippets write:snippets",
+                        redirect_uri: window.location.origin,
+                    },
+                })
             .catch(error => console.error(error));
     });
 
     const snippetOperations: SnippetOperations = new SnippetOperationsImpl(getAccessTokenSilently);
 
-    return snippetOperations
-}
+    return snippetOperations;
+};
 
 export const useGetSnippets = (page: number = 0, pageSize: number = 10, snippetName?: string) => {
     const snippetOperations = useSnippetsOperations()

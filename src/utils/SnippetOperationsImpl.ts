@@ -5,14 +5,36 @@ import {Rule} from "../types/Rule.ts";
 import {TestCase} from "../types/TestCase.ts";
 import {PaginatedUsers} from "./users.ts";
 import {TestCaseResult} from "./queries.tsx";
-import {BACKEND_URL} from "./constants.ts";
 
 export class SnippetOperationsImpl implements SnippetOperations{
 
-  private getToken: () => Promise<string>;
+  private readonly getToken: () => Promise<string>;
 
   constructor(getToken: () => Promise<string>) {
     this.getToken = getToken;
+  }
+
+  async getFormatRules(): Promise<Rule[]> {
+    const token = await this.getToken();
+    try {
+      const response = await fetch(`http://localhost:8082/v1/snippet/format/rules`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        console.log('Network response was not ok:', response.status);
+      }
+
+      const data = await response.json();
+      return data as Rule[];
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+      return [];
+    }
   }
 
     async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
@@ -63,28 +85,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
         return Promise.resolve([]);
     }
 
-  async getFormatRules(): Promise<Rule[]> {
-    const token = await this.getToken();
-    try {
-      const response = await fetch(`http://localhost:8082/v1/snippet/format/rules`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
 
-      if (!response.ok) {
-        console.log('Network response was not ok:', response.status);
-      }
-
-      const data = await response.json();
-      return data as Rule[];
-    } catch (error) {
-      console.error('There was a problem with the fetch operation:', error);
-      return [];
-    }
-  }
 
 
   getLintingRules(): Promise<Rule[]> {
