@@ -38,8 +38,8 @@ export class SnippetOperationsImpl implements SnippetOperations{
   }
 
     async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
-      const token = this.getToken();
-      const response = await fetch(`http://localhost:8082/v1/snippet`, {
+      const token = await this.getToken();
+      const response = await fetch(`http://localhost:8082/v1/snippet/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
