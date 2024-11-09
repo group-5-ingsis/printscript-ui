@@ -81,11 +81,28 @@ export class SnippetOperationsImpl implements SnippetOperations{
         return Promise.resolve("");
     }
 
-    getFileTypes(): Promise<FileType[]> {
-        return Promise.resolve([]);
+    async getFileTypes(): Promise<FileType[]> {
+      const token = await this.getToken();
+      try {
+        const response = await fetch(`http://localhost:8082/v1/snippet/language/types`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          console.log('Network response was not ok:', response.status);
+        }
+
+        const data = await response.json();
+        return data as FileType[];
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        return [];
+      }
     }
-
-
 
 
   getLintingRules(): Promise<Rule[]> {
