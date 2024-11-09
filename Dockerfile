@@ -1,20 +1,29 @@
-FROM node:18-slim AS builder
+FROM node:18-slim AS base
 WORKDIR /app
 
+ARG BUILD_ENV
+ENV NODE_ENV=${BUILD_ENV}
+
 COPY package*.json ./
-RUN npm install
+
+RUN if [ "$NODE_ENV" = "development" ]; then \
+      npm install; \
+    else \
+      npm ci --only=production; \
+    fi
 
 COPY . .
-RUN npm run build
 
-FROM node:18-slim
-WORKDIR /app
-
-ENV NODE_ENV=production
-COPY package*.json ./
-RUN npm ci --only=production # Install only production dependencies
-
-COPY --from=builder /app/dist ./dist
+RUN if [ "$NODE_ENV" = "development" ]; then \
+      echo "Skipping build for development"; \
+    else \
+      npm run build; \
+    fi
 
 EXPOSE 5173
-CMD ["npm", "start"]
+
+CMD if [ "$NODE_ENV" = "development" ]; then \
+      npm run dev; \
+    else \
+      npm start; \
+    fi
