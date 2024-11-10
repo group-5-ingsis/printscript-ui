@@ -14,16 +14,24 @@ import {useEffect} from "react";
 export const useSnippetsOperations = () => {
     const { getAccessTokenSilently } = useAuth0();
 
-    useEffect(() => {
-        getAccessTokenSilently({
-                    authorizationParams: {
-                        audience: import.meta.env.VITE_AUTH0_AUDIENCE ?? "",
-                        scope: "read:snippets write:snippets",
-                        redirect_uri: window.location.origin,
-                    },
-                })
-            .catch(error => console.error(error));
-    });
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const token = await getAccessTokenSilently({
+          authorizationParams: {
+            audience: import.meta.env.VITE_AUTH0_AUDIENCE ?? "",
+            scope: "read:snippets write:snippets",
+            redirect_uri: window.location.origin,
+          },
+        });
+        console.log(token);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchToken();
+  }, [getAccessTokenSilently]);
 
     const snippetOperations: SnippetOperations = new SnippetOperationsImpl(getAccessTokenSilently);
 
