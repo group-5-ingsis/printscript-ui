@@ -20,9 +20,10 @@ RUN if [ "$NODE_ENV" != "development" ]; then \
 FROM node:18-slim AS final
 WORKDIR /app
 
-COPY --from=build /app/dist ./dist
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
+
+COPY --from=build /app/dist ./dist || echo "No build output in development mode."
 
 EXPOSE 5173
 
