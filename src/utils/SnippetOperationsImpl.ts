@@ -17,7 +17,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
   async getFormatRules(): Promise<Rule[]> {
     const token = await this.getToken();
     try {
-      const response = await fetch(`https://snippets:8082/v1/snippet/format/rules`, {
+      const response = await fetch(`/snippets/v1/snippet/format/rules`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -39,7 +39,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
     async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
       const token = await this.getToken();
-      const response = await fetch(`http://snippets:8082/v1/snippet/`, {
+      const response = await fetch(`/snippets/v1/snippet/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -59,7 +59,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
     async deleteSnippet(id: string): Promise<string> {
       const token = await this.getToken();
       try {
-        const response = await fetch(`http://snippets:8082/v1/snippet/${id}`, {
+        const response = await fetch(`/snippets/v1/snippet/${id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -84,7 +84,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
     async getFileTypes(): Promise<FileType[]> {
       const token = await this.getToken();
       try {
-        const response = await fetch(`http://snippets:8082/v1/snippet/language/types`, {
+        const response = await fetch(`/snippets:/v1/snippet/language/types`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -112,7 +112,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
     async getSnippetById(id: string): Promise<Snippet | undefined> {
       const token = await this.getToken();
       try {
-        const response = await fetch(`http://snippets:8082/v1/snippet/${id}`, {
+        const response = await fetch(`/snippets/v1/snippet/${id}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
