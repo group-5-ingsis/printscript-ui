@@ -1,33 +1,23 @@
-FROM node:18-slim AS dependencies
+FROM node:18-slim AS base
 WORKDIR /app
 
-ARG BUILD_ENV=production
+ARG BUILD_ENV
 ENV NODE_ENV=${BUILD_ENV}
 
 COPY package*.json ./
+
 RUN if [ "$NODE_ENV" = "development" ]; then \
       npm install; \
     else \
-      npm ci --only=production --prefer-offline; \
+      npm ci --only=production; \
     fi
 
-FROM dependencies AS build
-COPY . .
-RUN if [ "$NODE_ENV" != "development" ]; then \
-      npm run build; \
-    fi
-
-FROM node:18-slim AS final
-WORKDIR /app
-
-COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 
-ARG BUILD_ENV
-RUN if [ "$BUILD_ENV" != "development" ] && [ -d /app/dist ]; then \
-      cp -r /app/dist ./dist; \
+RUN if [ "$NODE_ENV" = "development" ]; then \
+      echo "Skipping build for development"; \
     else \
-      echo "Development mode - skipping dist copy"; \
+      npm run build; \
     fi
 
 EXPOSE 5173
