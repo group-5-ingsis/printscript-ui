@@ -17,7 +17,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
   async getFormatRules(): Promise<Rule[]> {
     const token = await this.getToken();
     try {
-      const response = await fetch(`http://snippets:8082/v1/snippet/format/rules`, {
+      const response = await fetch(`https://snippets:8082/v1/snippet/format/rules`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
