@@ -20,7 +20,6 @@ export const useSnippetsOperations = () => {
         const token = await getAccessTokenSilently({
           authorizationParams: {
             audience: import.meta.env.VITE_AUTH0_AUDIENCE ?? "",
-            scope: "read:snippets write:snippets",
             redirect_uri: window.location.origin,
           },
         });
