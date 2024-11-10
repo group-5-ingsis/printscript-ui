@@ -23,7 +23,12 @@ WORKDIR /app
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 
-COPY --from=build /app/dist ./dist || echo "No build output in development mode."
+ARG BUILD_ENV
+RUN if [ "$BUILD_ENV" != "development" ] && [ -d /app/dist ]; then \
+      cp -r /app/dist ./dist; \
+    else \
+      echo "Development mode - skipping dist copy"; \
+    fi
 
 EXPOSE 5173
 
