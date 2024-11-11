@@ -9,12 +9,11 @@ import {Auth0Provider} from "@auth0/auth0-react";
 createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <Auth0Provider
-            domain={import.meta.env.VITE_AUTH0_DOMAIN ?? "hellooo"}
+            domain={import.meta.env.VITE_AUTH0_DOMAIN ?? "hellooouauauaua"}
             clientId={import.meta.env.VITE_AUTH0_CLIENT_ID ?? ""}
             authorizationParams={{
                 redirect_uri: window.location.origin,
                 audience: import.meta.env.VITE_AUTH0_AUDIENCE ,
-                scope: "read:snippets write:snippets",
             }}
         >
             <PaginationProvider>
