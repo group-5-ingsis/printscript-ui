@@ -85,10 +85,10 @@ export const useShareSnippet = () => {
 };
 
 
-export const useGetTestCases = () => {
-    const snippetOperations = useSnippetsOperations()
+export const useGetTestCases = (snippetId: string) => {
+  const snippetOperations = useSnippetsOperations();
 
-    return useQuery<TestCase[] | undefined, Error>(['testCases'], () => snippetOperations.getTestCases(), {});
+  return useQuery<TestCase[] | undefined, Error>(['testCases', snippetId], () => snippetOperations.getTestCases(snippetId));
 };
 
 

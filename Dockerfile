@@ -1,29 +1,15 @@
-FROM node:18-slim AS base
+FROM node:18-slim AS build
 WORKDIR /app
 
-ARG BUILD_ENV
-ENV NODE_ENV=${BUILD_ENV}
-
 COPY package*.json ./
-
-RUN if [ "$NODE_ENV" = "development" ]; then \
-      npm install; \
-    else \
-      npm ci --only=production; \
-    fi
+RUN npm install
 
 COPY . .
+RUN npm run build
 
-RUN if [ "$NODE_ENV" = "development" ]; then \
-      echo "Skipping build for development"; \
-    else \
-      npm run build; \
-    fi
+FROM nginx:alpine AS serve
+COPY --from=build /app/dist /usr/share/nginx/html
 
-EXPOSE 5173
+EXPOSE 80
 
-CMD if [ "$NODE_ENV" = "development" ]; then \
-      npm run dev; \
-    else \
-      npm start; \
-    fi
+CMD ["nginx", "-g", "daemon off;"]
