@@ -13,7 +13,7 @@ console.log('VITE_AUTH0_AUDIENCE:', import.meta.env.VITE_AUTH0_AUDIENCE);
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Auth0Provider
-      domain={import.meta.env.VITE_AUTH0_DOMAIN ?? "hellooouauauaua"}
+      domain={import.meta.env.VITE_AUTH0_DOMAIN ?? "env variables are not defined !"}
       clientId={import.meta.env.VITE_AUTH0_CLIENT_ID ?? ""}
       authorizationParams={{
         redirect_uri: window.location.origin,
