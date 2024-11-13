@@ -70,7 +70,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(updateSnippet)
+        body: updateSnippet.content
       });
 
       if (!response.ok) {
@@ -83,7 +83,8 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
     async deleteSnippet(id: string): Promise<string> {
       const token = await this.getToken();
-      const url = `/${this.SNIPPETS_BASE_URL}/${id}`;
+      const url = `${this.SNIPPETS_BASE_URL}/${id}`;
+      console.log(url)
       console.log("Deleting snippet:", id)
       try {
         const response = await fetch(url, {
