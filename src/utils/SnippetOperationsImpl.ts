@@ -18,6 +18,8 @@ export class SnippetOperationsImpl implements SnippetOperations{
   async getFormatRules(): Promise<Rule[]> {
     const token = await this.getToken();
     const url = `${this.SNIPPETS_BASE_URL}/format/rules`;
+    console.log("URL: ", url)
+    console.log("BASE URL: ", this.SNIPPETS_BASE_URL);
     try {
       const response = await fetch(url, {
         method: 'GET',
@@ -115,7 +117,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
     async getSnippetById(id: string): Promise<Snippet | undefined> {
       const token = await this.getToken();
-      const url = `${this.SNIPPETS_BASE_URL}/${id}`;
+      const url = `${this.SNIPPETS_BASE_URL}/id/${id}`;
       try {
         const response = await fetch(url, {
           method: 'GET',
@@ -143,9 +145,46 @@ export class SnippetOperationsImpl implements SnippetOperations{
         return Promise.resolve(undefined);
     }
 
-    listSnippetDescriptors(page: number, pageSize: number, snippetName?: string): Promise<PaginatedSnippets> {
-        return Promise.resolve(undefined);
+  async listSnippetDescriptors(
+    page: number,
+    pageSize: number,
+    snippetName?: string
+  ): Promise<PaginatedSnippets> {
+    const token = await this.getToken();
+    const url = `${this.SNIPPETS_BASE_URL}/name/${snippetName}`;
+    console.log(url);
+
+    try {
+      const response = await fetch(url.toString(), {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      return {
+        page,
+        page_size: pageSize,
+        count: data.length,
+        snippets: data.content as Snippet[],
+      };
+    } catch (error) {
+      console.error('There was an error fetching the snippet descriptors:', error);
+      return {
+        page,
+        page_size: pageSize,
+        count: 0,
+        snippets: [],
+      };
     }
+  }
 
     modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
         return Promise.resolve([]);
