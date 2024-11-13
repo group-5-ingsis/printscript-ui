@@ -61,6 +61,26 @@ export class SnippetOperationsImpl implements SnippetOperations{
       return data as Snippet;
     }
 
+    async updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet> {
+      const token = await this.getToken();
+      const url = `${this.SNIPPETS_BASE_URL}/${id}`;
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateSnippet)
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      return data as Snippet;
+    }
+
     async deleteSnippet(id: string): Promise<string> {
       const token = await this.getToken();
       try {
@@ -89,6 +109,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
     async getFileTypes(): Promise<FileType[]> {
       const token = await this.getToken();
       const url = `${this.SNIPPETS_BASE_URL}/language/types`;
+      console.log("getting file types")
       try {
         const response = await fetch(url, {
           method: 'GET',
@@ -181,6 +202,8 @@ export class SnippetOperationsImpl implements SnippetOperations{
     snippetName?: string
   ): Promise<PaginatedSnippets> {
     const token = await this.getToken();
+    
+    console.log("Getting all snippets")
 
     const url = snippetName
       ? `${this.SNIPPETS_BASE_URL}/name/${snippetName}`
@@ -243,8 +266,5 @@ export class SnippetOperationsImpl implements SnippetOperations{
         return Promise.resolve(undefined);
     }
 
-    updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet> {
-      
-        return Promise.resolve(undefined);
-    }
+    
 }
