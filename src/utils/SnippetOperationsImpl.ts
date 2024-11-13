@@ -41,7 +41,8 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
     async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
       const token = await this.getToken();
-      const response = await fetch(`/${this.SNIPPETS_BASE_URL}/`, {
+      const url = `${this.SNIPPETS_BASE_URL}/`;
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -85,8 +86,9 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
     async getFileTypes(): Promise<FileType[]> {
       const token = await this.getToken();
+      const url = `${this.SNIPPETS_BASE_URL}/language/types`;
       try {
-        const response = await fetch(`/${this.SNIPPETS_BASE_URL}/language/types`, {
+        const response = await fetch(url, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -113,8 +115,9 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
     async getSnippetById(id: string): Promise<Snippet | undefined> {
       const token = await this.getToken();
+      const url = `${this.SNIPPETS_BASE_URL}/${id}`;
       try {
-        const response = await fetch(`/${this.SNIPPETS_BASE_URL}/${id}`, {
+        const response = await fetch(url, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
