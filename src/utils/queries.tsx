@@ -17,12 +17,14 @@ export const useSnippetsOperations = () => {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        await getAccessTokenSilently({
-          authorizationParams: {
-            audience: import.meta.env.VITE_AUTH0_AUDIENCE ?? "",
-            redirect_uri: window.location.origin,
-          },
-        });
+        const token = await getAccessTokenSilently({
+            authorizationParams: {
+              audience: import.meta.env.VITE_AUTH0_AUDIENCE ?? "",
+              redirect_uri: window.location.origin,
+            },
+          });
+        
+          console.log("Fetched Token:", token);
       } catch (error) {
         console.error(error);
       }
