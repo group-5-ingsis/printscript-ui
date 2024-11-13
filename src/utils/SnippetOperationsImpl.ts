@@ -10,7 +10,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
   private readonly getToken: () => Promise<string>;
 
-  private readonly SNIPPETS_BASE_URL = import.meta.env.VITE_SNIPPETS_URL || 'snippets';
+  private readonly SNIPPETS_BASE_URL = import.meta.env.VITE_SNIPPETS_URL || '/snippets';
 
   constructor(getToken: () => Promise<string>) {
     this.getToken = getToken;
