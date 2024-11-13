@@ -116,6 +116,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
     async getSnippetById(id: string): Promise<Snippet | undefined> {
       const token = await this.getToken();
       const url = `${this.SNIPPETS_BASE_URL}/id/${id}`;
+      console.log(url)
       try {
         const response = await fetch(url, {
           method: 'GET',
@@ -128,6 +129,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
+        console.log(data)
         return data as Snippet;
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
@@ -168,7 +170,6 @@ export class SnippetOperationsImpl implements SnippetOperations{
       }
 
       const data = await response.json();
-      console.log(data)
 
       return {
         page,
