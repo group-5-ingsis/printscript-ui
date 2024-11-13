@@ -167,7 +167,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
     async getUserFriends(name?: string, page: number = 1, pageSize: number = 10): Promise<PaginatedUsers> {
       const token = await this.getToken();
-      const url = `${this.PERMISSION_BASE_URL}/users}`;
+      const url = `${this.PERMISSION_BASE_URL}/users`;
       try {
 
         const response = await fetch(url, {
