@@ -83,8 +83,10 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
     async deleteSnippet(id: string): Promise<string> {
       const token = await this.getToken();
+      const url = `/${this.SNIPPETS_BASE_URL}/${id}`;
+      console.log("Deleting snippet:", id)
       try {
-        const response = await fetch(`/${this.SNIPPETS_BASE_URL}/${id}`, {
+        const response = await fetch(url, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -95,7 +97,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        return data.message;
+        return data;
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
         return "error fetching";
@@ -202,7 +204,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
     snippetName?: string
   ): Promise<PaginatedSnippets> {
     const token = await this.getToken();
-    
+
     console.log("Getting all snippets")
 
     const url = snippetName
