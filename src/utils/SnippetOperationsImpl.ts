@@ -19,6 +19,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
   async getFormatRules(): Promise<Rule[]> {
     const token = await this.getToken();
     const url = `${this.SNIPPETS_BASE_URL}/format/rules`;
+    console.log("URL To Request Rules:" ,  url)
     try {
       const response = await fetch(url, {
         method: 'GET',
