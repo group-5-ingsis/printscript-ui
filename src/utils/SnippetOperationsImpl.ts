@@ -3,7 +3,7 @@ import {CreateSnippet, PaginatedSnippets, Snippet, UpdateSnippet} from "./snippe
 import {FileType} from "../types/FileType.ts";
 import {Rule} from "../types/Rule.ts";
 import {TestCase} from "../types/TestCase.ts";
-import {PaginatedUsers} from "./users.ts";
+import {PaginatedUsers, User} from "./users.ts";
 import {TestCaseResult} from "./queries.tsx";
 
 export class SnippetOperationsImpl implements SnippetOperations{
@@ -11,6 +11,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
   private readonly getToken: () => Promise<string>;
 
   private readonly SNIPPETS_BASE_URL = import.meta.env.VITE_SNIPPETS_URL || '/snippets';
+  private readonly PERMISSION_BASE_URL = import.meta.env.VITE_PERMISSION_URL || '/permission';
 
   constructor(getToken: () => Promise<string>) {
     this.getToken = getToken;
@@ -116,7 +117,6 @@ export class SnippetOperationsImpl implements SnippetOperations{
     async getSnippetById(id: string): Promise<Snippet | undefined> {
       const token = await this.getToken();
       const url = `${this.SNIPPETS_BASE_URL}/id/${id}`;
-      console.log(url)
       try {
         const response = await fetch(url, {
           method: 'GET',
@@ -129,7 +129,6 @@ export class SnippetOperationsImpl implements SnippetOperations{
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        console.log(data)
         return data as Snippet;
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
@@ -141,8 +140,38 @@ export class SnippetOperationsImpl implements SnippetOperations{
         return Promise.resolve([]);
     }
 
-    getUserFriends(name?: string, page?: number, pageSize?: number): Promise<PaginatedUsers> {
-        return Promise.resolve(undefined);
+    async getUserFriends(name?: string, page: number = 1, pageSize: number = 10): Promise<PaginatedUsers> {
+      const token = await this.getToken();
+      const url = `${this.PERMISSION_BASE_URL}/users}`;
+      try {
+
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+  
+        const users: User[] = await response.json();
+
+        const filteredUsers = name
+        ? users.filter(user => user.name.toLowerCase().includes(name.toLowerCase()))
+        : users;
+
+        const count = filteredUsers.length;
+        const paginatedUsers = filteredUsers.slice((page - 1) * pageSize, page * pageSize);
+  
+        return {
+          page,
+          page_size: pageSize,
+          count,
+          users: paginatedUsers,
+        };
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        throw new Error('Could not fetch users');
+      }
     }
 
   async listSnippetDescriptors(
