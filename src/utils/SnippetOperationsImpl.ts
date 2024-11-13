@@ -11,7 +11,6 @@ export class SnippetOperationsImpl implements SnippetOperations{
   private readonly getToken: () => Promise<string>;
 
   private readonly SNIPPETS_BASE_URL = import.meta.env.VITE_SNIPPETS_URL || '/snippets';
-  private readonly PERMISSION_BASE_URL = import.meta.env.VITE_PERMISSION_URL || '/permission';
 
   constructor(getToken: () => Promise<string>) {
     this.getToken = getToken;
@@ -167,7 +166,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
     async getUserFriends(name?: string, page: number = 1, pageSize: number = 10): Promise<PaginatedUsers> {
       const token = await this.getToken();
-      const url = `${this.PERMISSION_BASE_URL}/users`;
+      const url = `${this.SNIPPETS_BASE_URL}/users`;
       try {
 
         const response = await fetch(url, {
@@ -261,8 +260,27 @@ export class SnippetOperationsImpl implements SnippetOperations{
         return Promise.resolve("");
     }
 
-    shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
-        return Promise.resolve(undefined);
+    async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
+      const token = await this.getToken();
+      const url = `${this.SNIPPETS_BASE_URL}/share/${snippetId}/${userId}`;
+      console.log("URL for sharing snippet:", url)
+      try {
+
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+  
+        const snippet = await response.json();
+  
+        return snippet
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        throw new Error('Could not fetch users');
+      }
     }
 
     testSnippet(testCase: Partial<TestCase>): Promise<TestCaseResult> {
