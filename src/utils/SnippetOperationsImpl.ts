@@ -117,21 +117,25 @@ export class SnippetOperationsImpl implements SnippetOperations{
                   'Authorization': `Bearer ${token}`,
                   'Content-Type': 'application/json',
               },
-              body: JSON.stringify(snippet)
+              body: snippet,
           });
   
+
           if (!response.ok) {
               console.log('Network response was not ok:', response.status);
               return '';
           }
+
+          const result = await response.text();  
   
-          const data = await response.json();
-          return data.formattedSnippet;
+          return result;
       } catch (error) {
           console.error('There was a problem with the fetch operation:', error);
           return '';
       }
   }
+  
+  
   
 
     async getFileTypes(): Promise<FileType[]> {
