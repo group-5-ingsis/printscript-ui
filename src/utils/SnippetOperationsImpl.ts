@@ -104,9 +104,35 @@ export class SnippetOperationsImpl implements SnippetOperations{
       }
     }
 
-    formatSnippet(snippet: string): Promise<string> {
-        return Promise.resolve("");
-    }
+    async formatSnippet(snippet: string): Promise<string> {
+      const token = await this.getToken();
+      const url = `${this.SNIPPETS_BASE_URL}/format`;
+  
+      console.log("Formatting...");
+  
+      try {
+          const response = await fetch(url, {
+              method: 'POST',
+              headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(snippet)
+          });
+  
+          if (!response.ok) {
+              console.log('Network response was not ok:', response.status);
+              return '';
+          }
+  
+          const data = await response.json();
+          return data.formattedSnippet;
+      } catch (error) {
+          console.error('There was a problem with the fetch operation:', error);
+          return '';
+      }
+  }
+  
 
     async getFileTypes(): Promise<FileType[]> {
       const token = await this.getToken();
