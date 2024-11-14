@@ -164,9 +164,32 @@ export class SnippetOperationsImpl implements SnippetOperations{
     }
 
 
-  getLintingRules(): Promise<Rule[]> {
-        return Promise.resolve([]);
+    async getLintingRules(): Promise<Rule[]> {
+    const token = await this.getToken();
+      const url = `${this.SNIPPETS_BASE_URL}/lint/rules`;
+      console.log("URL To Request Rules:" ,  url)
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+  
+        if (!response.ok) {
+          console.log('Network response was not ok:', response.status);
+        }
+  
+        const data = await response.json();
+        return data as Rule[];
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        return [];
+      }
     }
+  
+      
 
     async getSnippetById(id: string): Promise<Snippet | undefined> {
       const token = await this.getToken();
@@ -274,12 +297,57 @@ export class SnippetOperationsImpl implements SnippetOperations{
   }
 
 
-  modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
-        return Promise.resolve([]);
-    }
+  async modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
+    const token = await this.getToken();
+    const url = `${this.SNIPPETS_BASE_URL}/format/rules`;
+    console.log("Formatting all snippets:", url);
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRules)
+        });
 
-    modifyLintingRule(newRules: Rule[]): Promise<Rule[]> {
-        return Promise.resolve([]);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const rules = await response.json();
+        return rules;
+    } catch (error) {
+        console.error('Error updating format rules:', error);
+        throw new Error('Could not update format rules');
+    }
+}
+
+
+    async modifyLintingRule(newRules: Rule[]): Promise<Rule[]> {
+      const token = await this.getToken();
+      const url = `${this.SNIPPETS_BASE_URL}/lint/rules`;
+      console.log("Linting all snippets:", url);
+      try {
+          const response = await fetch(url, {
+              method: 'POST',
+              headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(newRules)
+          });
+  
+          if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+  
+          const rules = await response.json();
+          return rules;
+      } catch (error) {
+          console.error('Error updating format rules:', error);
+          throw new Error('Could not update format rules');
+      }
     }
 
     postTestCase(testCase: Partial<TestCase>): Promise<TestCase> {
