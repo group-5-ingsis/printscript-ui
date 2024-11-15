@@ -15,10 +15,10 @@ export class SnippetOperationsImpl implements SnippetOperations{
   constructor(getToken: () => Promise<string>) {
     this.getToken = getToken;
   }
+
   async getFormatRules(): Promise<Rule[]> {
     const token = await this.getToken();
     const url = `${this.SNIPPETS_BASE_URL}/format/rules`;
-    console.log("URL To Request Rules:" ,  url)
     try {
       const response = await fetch(url, {
         method: 'GET',
@@ -83,8 +83,6 @@ export class SnippetOperationsImpl implements SnippetOperations{
     async deleteSnippet(id: string): Promise<string> {
       const token = await this.getToken();
       const url = `${this.SNIPPETS_BASE_URL}/${id}`;
-      console.log(url)
-      console.log("Deleting snippet:", id)
       try {
         const response = await fetch(url, {
           method: 'DELETE',
@@ -107,9 +105,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
     async formatSnippet(snippet: string): Promise<string> {
       const token = await this.getToken();
       const url = `${this.SNIPPETS_BASE_URL}/format`;
-  
-      console.log("Formatting...");
-  
+
       try {
           const response = await fetch(url, {
               method: 'POST',
@@ -141,7 +137,6 @@ export class SnippetOperationsImpl implements SnippetOperations{
     async getFileTypes(): Promise<FileType[]> {
       const token = await this.getToken();
       const url = `${this.SNIPPETS_BASE_URL}/language/types`;
-      console.log("getting file types")
       try {
         const response = await fetch(url, {
           method: 'GET',
@@ -167,7 +162,6 @@ export class SnippetOperationsImpl implements SnippetOperations{
     async getLintingRules(): Promise<Rule[]> {
     const token = await this.getToken();
       const url = `${this.SNIPPETS_BASE_URL}/lint/rules`;
-      console.log("URL To Request Rules:" ,  url)
       try {
         const response = await fetch(url, {
           method: 'GET',
@@ -258,8 +252,6 @@ export class SnippetOperationsImpl implements SnippetOperations{
   ): Promise<PaginatedSnippets> {
     const token = await this.getToken();
 
-    console.log("Getting all snippets")
-
     const url = snippetName
       ? `${this.SNIPPETS_BASE_URL}/name/${snippetName}`
       : `${this.SNIPPETS_BASE_URL}/`;
@@ -300,7 +292,6 @@ export class SnippetOperationsImpl implements SnippetOperations{
   async modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
     const token = await this.getToken();
     const url = `${this.SNIPPETS_BASE_URL}/format/rules`;
-    console.log("Formatting all snippets:", url);
     try {
         const response = await fetch(url, {
             method: 'POST',
@@ -327,7 +318,6 @@ export class SnippetOperationsImpl implements SnippetOperations{
     async modifyLintingRule(newRules: Rule[]): Promise<Rule[]> {
       const token = await this.getToken();
       const url = `${this.SNIPPETS_BASE_URL}/lint/rules`;
-      console.log("Linting all snippets:", url);
       try {
           const response = await fetch(url, {
               method: 'POST',
@@ -361,7 +351,6 @@ export class SnippetOperationsImpl implements SnippetOperations{
     async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
       const token = await this.getToken();
       const url = `${this.SNIPPETS_BASE_URL}/share/${snippetId}/${userId}`;
-      console.log("URL for sharing snippet:", url)
       try {
 
         const response = await fetch(url, {

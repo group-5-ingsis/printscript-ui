@@ -1,4 +1,5 @@
-export const FRONTEND_URL = process?.env?.FRONTEND_URL ?? "http://localhost:5173"
-export const BACKEND_URL = process?.env?.BACKEND_URL ?? "http://localhost:8080/api"
-export const AUTH0_USERNAME = process?.env?.AUTH0_USERNAME ?? "test@test.com"
+export const FRONTEND_URL = process?.env?.FRONTEND_URL ?? "https://snippetsearcher-group5.duckdns.org/"
+export const BACKEND_URL = process?.env?.BACKEND_URL ?? "snippet"
+export const AUTH0_USERNAME = process?.env?.AUTH0_USERNAME ?? "marcos@test.com"
 export const AUTH0_PASSWORD = process?.env?.AUTH0_PASSWORD ?? "Hola123!"
+
