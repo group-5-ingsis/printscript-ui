@@ -92,10 +92,9 @@ export class SnippetOperationsImpl implements SnippetOperations{
           }
         });
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          console.log('Network response was not ok');
         }
-        const data = await response.json();
-        return data;
+          return await response.json();
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
         return "error fetching";
@@ -122,9 +121,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
               return '';
           }
 
-          const result = await response.text();  
-  
-          return result;
+          return await response.text();
       } catch (error) {
           console.error('There was a problem with the fetch operation:', error);
           return '';
@@ -197,7 +194,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
           }
         });
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          console.log('Network response was not ok');
         }
         const data = await response.json();
         return data as Snippet;
@@ -331,9 +328,8 @@ export class SnippetOperationsImpl implements SnippetOperations{
           if (!response.ok) {
               throw new Error(`HTTP error! Status: ${response.status}`);
           }
-  
-          const rules = await response.json();
-          return rules;
+
+        return await response.json();
       } catch (error) {
           console.error('Error updating format rules:', error);
           throw new Error('Could not update format rules');
@@ -354,16 +350,14 @@ export class SnippetOperationsImpl implements SnippetOperations{
       try {
 
         const response = await fetch(url, {
-          method: 'GET',
+          method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
-  
-        const snippet = await response.json();
-  
-        return snippet
+
+        return await response.json()
       } catch (error) {
         console.error('Error fetching user data:', error);
         throw new Error('Could not fetch users');
