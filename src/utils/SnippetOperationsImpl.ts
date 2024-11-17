@@ -204,9 +204,6 @@ export class SnippetOperationsImpl implements SnippetOperations{
       }
     }
 
-    getTestCases(): Promise<TestCase[]> {
-        return Promise.resolve([]);
-    }
 
     async getUserFriends(name?: string, page: number = 1, pageSize: number = 10): Promise<PaginatedUsers> {
       const token = await this.getToken();
@@ -336,12 +333,62 @@ export class SnippetOperationsImpl implements SnippetOperations{
       }
     }
 
-    postTestCase(testCase: Partial<TestCase>): Promise<TestCase> {
+    async postTestCase(snippetId: string, testCase: Partial<TestCase>): Promise<TestCase> {
+        const token = await this.getToken();
+        const url = `${this.SNIPPETS_BASE_URL}/test/${snippetId}`;
+        console.log(url)
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(testCase),
+            });
+
+            if (!response.ok) {
+                console.error(`HTTP error! Status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error posting test case:', error);
+            throw new Error('Could not post test case');
+        }
+    }
+
+
+    async removeTestCase(id: string): Promise<string> {
+        const token = await this.getToken();
+        const url = `${this.SNIPPETS_BASE_URL}/test`;
+        try {
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: id
+            });
+
+            if (!response.ok) {
+                console.error(`HTTP error! Status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error updating format rules:', error);
+            throw new Error('Could not update format rules');
+        }
+    }
+
+    testSnippet(testCase: Partial<TestCase>): Promise<TestCaseResult> {
         return Promise.resolve(undefined);
     }
 
-    removeTestCase(id: string): Promise<string> {
-        return Promise.resolve("");
+    getTestCases(snippetId: String): Promise<TestCase[]> {
+        return Promise.resolve([]);
     }
 
     async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
@@ -362,10 +409,6 @@ export class SnippetOperationsImpl implements SnippetOperations{
         console.error('Error fetching user data:', error);
         throw new Error('Could not fetch users');
       }
-    }
-
-    testSnippet(testCase: Partial<TestCase>): Promise<TestCaseResult> {
-        return Promise.resolve(undefined);
     }
 
     

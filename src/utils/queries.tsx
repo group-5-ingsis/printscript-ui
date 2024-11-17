@@ -94,8 +94,8 @@ export const useGetTestCases = (snippetId: string) => {
 export const usePostTestCase = () => {
     const snippetOperations = useSnippetsOperations()
 
-    return useMutation<TestCase, Error, Partial<TestCase>>(
-        (tc) => snippetOperations.postTestCase(tc)
+    return useMutation<TestCase, Error, { snippetId: string; testCase: Partial<TestCase> }>(
+        ({ snippetId, testCase }) => snippetOperations.postTestCase(snippetId, testCase)
     );
 };
 
