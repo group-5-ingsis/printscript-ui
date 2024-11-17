@@ -14,27 +14,30 @@ import {useEffect} from "react";
 export const useSnippetsOperations = () => {
     const { getAccessTokenSilently } = useAuth0();
 
-  useEffect(() => {
-    const fetchToken = async () => {
-      try {
-          await getAccessTokenSilently({
-              authorizationParams: {
-                  audience: import.meta.env.VITE_AUTH0_AUDIENCE ?? "",
-                  redirect_uri: window.location.origin,
-              },
-          });
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    useEffect(() => {
+        const fetchToken = async () => {
+            try {
+                const token = await getAccessTokenSilently({
+                    authorizationParams: {
+                        audience: import.meta.env.VITE_AUTH0_AUDIENCE ?? "",
+                        redirect_uri: window.location.origin,
+                    },
+                });
 
-    fetchToken();
-  }, [getAccessTokenSilently]);
+                localStorage.setItem('authAccessToken', token);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchToken();
+    }, [getAccessTokenSilently]);
 
     const snippetOperations: SnippetOperations = new SnippetOperationsImpl(getAccessTokenSilently);
 
     return snippetOperations;
 };
+
 
 export const useGetSnippets = (page: number = 0, pageSize: number = 10, snippetName?: string) => {
     const snippetOperations = useSnippetsOperations()
