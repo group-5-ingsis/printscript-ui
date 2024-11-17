@@ -23,7 +23,7 @@ describe('Add snippet tests', () => {
     cy.get('.MuiList-root > [tabindex="0"]').click();
     cy.get('#name').type('Some snippet name');
     cy.get('#demo-simple-select').click()
-    cy.get('[data-testid="menu-option-printscript"]').click()
+    cy.get('[data-testid="menu-option-PrintScript 1.0"]').click()
 
     cy.get('[data-testid="add-snippet-code-editor"]').click();
     cy.get('[data-testid="add-snippet-code-editor"]').type(`const snippet: String = "some snippet" \n print(snippet)`);
