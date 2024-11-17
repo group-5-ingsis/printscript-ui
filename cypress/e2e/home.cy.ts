@@ -32,7 +32,7 @@ describe('Home', () => {
     first10Snippets.should('have.length.lessThan', 10)
   })
 
-  it('Can creat snippet find snippets by name', () => {
+  it('Can create snippet find snippets by name', () => {
     cy.visit(FRONTEND_URL)
     const snippetData: CreateSnippet = {
       name: "Test name",
@@ -41,7 +41,7 @@ describe('Home', () => {
       extension: ".ps"
     }
 
-    cy.intercept('GET', BACKEND_URL+"/snippets*", (req) => {
+    cy.intercept('GET', BACKEND_URL+"/name", (req) => {
       req.reply((res) => {
         expect(res.statusCode).to.eq(200);
       });

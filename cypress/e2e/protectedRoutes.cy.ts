@@ -1,4 +1,4 @@
-import {AUTH0_USERNAME,AUTH0_PASSWORD} from "../../src/utils/constants";
+import {AUTH0_USERNAME, AUTH0_PASSWORD, AUTH0_DOMAIN} from "../../src/utils/constants";
 
 describe('Protected routes test', () => {
   it('should redirect to login when accessing a protected route unauthenticated', () => {
@@ -8,12 +8,12 @@ describe('Protected routes test', () => {
     cy.wait(1000)
 
     // Check if the URL is redirected to the login page
-    cy.url().should('include', '/login');
+    cy.url().should('include', AUTH0_DOMAIN);
   });
 
   it('should display login content', () => {
     // Visit the login page
-    cy.visit('/login');
+    cy.visit('AUTH0_DOMAIN');
 
     // Look for text that is likely to appear on a login page
     cy.contains('Log in').should('exist');
@@ -31,7 +31,7 @@ describe('Protected routes test', () => {
     cy.wait(1000)
 
     // Check if the URL is redirected to the login page
-    cy.url().should('not.include', '/login');
+    cy.url().should('not.include', 'AUTH0_DOMAIN');
   });
 
 })
