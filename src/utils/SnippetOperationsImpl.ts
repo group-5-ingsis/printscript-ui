@@ -5,6 +5,7 @@ import {Rule} from "../types/Rule.ts";
 import {TestCase} from "../types/TestCase.ts";
 import {PaginatedUsers, User} from "./users.ts";
 import {TestCaseResult} from "./queries.tsx";
+import {Test} from "../types/Test.ts";
 
 export class SnippetOperationsImpl implements SnippetOperations{
 
@@ -383,12 +384,57 @@ export class SnippetOperationsImpl implements SnippetOperations{
         }
     }
 
-    testSnippet(testCase: Partial<TestCase>): Promise<TestCaseResult> {
-        return Promise.resolve(undefined);
+    async testSnippet(testCase: Partial<TestCase>): Promise<TestCaseResult> {
+      const token = await this.getToken();
+      const url = `${this.SNIPPETS_BASE_URL}/test/${testCase.id}`;
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        });
+
+        if (!response.ok) {
+          console.error(`HTTP error! Status: ${response.status}`);
+        }
+
+        return await response.json();
+      } catch (error) {
+        console.error('Error updating format rules:', error);
+        throw new Error('Could not update format rules');
+      }
     }
 
-    getTestCases(snippetId: String): Promise<TestCase[]> {
-        return Promise.resolve([]);
+    async getTestCases(snippetId: string): Promise<TestCase[]> {
+      const token = await this.getToken();
+      const url = `${this.SNIPPETS_BASE_URL}/test/${snippetId}`;
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        });
+
+        if (!response.ok) {
+          console.error(`HTTP error! Status: ${response.status}`);
+          return [];
+        }
+
+        const data: Test[] = await response.json();
+        return data.map(dto => ({
+          id: dto.id,
+          name: dto.name,
+          input: dto.input ?? [],
+          output: dto.output ?? [],
+        }));
+      } catch (error) {
+        console.error('Error updating format rules:', error);
+        throw new Error('Could not update format rules');
+      }
     }
 
     async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
