@@ -9,7 +9,7 @@ export default defineConfig({
       return config
     },
     experimentalStudio: true,
-    baseUrl: "https://snippetsearcher-group5.duckdns.org",
+    baseUrl: "https://printscript-group5.duckdns.org",
   },
 });
   
