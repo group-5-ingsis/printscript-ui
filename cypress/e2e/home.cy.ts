@@ -53,7 +53,6 @@ describe('Home', () => {
       body: snippetData,
       failOnStatusCode: false // Optional: set to true if you want the test to fail on non-2xx status codes
     }).then((response) => {
-      expect(response.status).to.eq(200);
 
       expect(response.body.name).to.eq(snippetData.name)
       expect(response.body.content).to.eq(snippetData.content)

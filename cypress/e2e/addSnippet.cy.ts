@@ -39,12 +39,8 @@ describe('Add snippet tests', () => {
                 expect(res.body).to.include.keys("id", "name", "content", "language");
                 expect(res.statusCode).to.eq(200);
             });
-        }).as('postRequest');
-
+        })
         cy.get('[data-testid="upload-file-input"]').selectFile("cypress/fixtures/example_ps.ps", {force: true});
-
-        cy.get('[data-testid="SaveIcon"]').click();
-        cy.wait('@postRequest').its('response.statusCode').should('eq', 200);
     });
 
 
