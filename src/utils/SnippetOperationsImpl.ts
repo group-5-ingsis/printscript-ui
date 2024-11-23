@@ -185,7 +185,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
     async getSnippetById(id: string): Promise<Snippet | undefined> {
       const token = await this.getToken();
-      const url = `${this.SNIPPETS_BASE_URL}/id/${id}`;
+      const url = `${this.SNIPPETS_BASE_URL}/${id}`;
       try {
         const response = await fetch(url, {
           method: 'GET',

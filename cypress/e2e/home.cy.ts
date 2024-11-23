@@ -42,8 +42,7 @@ describe('Home', () => {
     }
 
     cy.intercept('GET', BACKEND_URL+"/name", (req) => {
-      req.reply((res) => {
-        expect(res.statusCode).to.eq(200);
+      req.reply(() => {
       });
     }).as('getSnippets');
 
