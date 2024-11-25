@@ -298,11 +298,10 @@ export class SnippetOperationsImpl implements SnippetOperations{
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            console.error(`HTTP error! Status: ${response.status}`);
         }
 
-        const rules = await response.json();
-        return rules;
+        return await response.json();
     } catch (error) {
         console.error('Error updating format rules:', error);
         throw new Error('Could not update format rules');
@@ -324,7 +323,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
           });
   
           if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
+               console.error(`HTTP error! Status: ${response.status}`);
           }
 
         return await response.json();
@@ -439,7 +438,10 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
     async shareSnippet(snippetId: string, userId: string): Promise<Snippet> {
       const token = await this.getToken();
-      const url = `${this.SNIPPETS_BASE_URL}/share/${snippetId}/${userId}`;
+
+      const encodedUserId = encodeURIComponent(userId);
+      const url = `${this.SNIPPETS_BASE_URL}/share/${snippetId}/${encodedUserId}`;
+      
       try {
 
         const response = await fetch(url, {
