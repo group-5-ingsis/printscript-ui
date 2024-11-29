@@ -385,7 +385,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
     async testSnippet(testCase: Partial<TestCase>): Promise<TestCaseResult> {
       const token = await this.getToken();
-      const url = `${this.SNIPPETS_BASE_URL}/test/${testCase.id}`;
+      const url = `${this.SNIPPETS_BASE_URL}/test/run/${testCase.id}`;
       try {
         const response = await fetch(url, {
           method: 'POST',
