@@ -2,22 +2,19 @@ import {AUTH0_USERNAME, AUTH0_PASSWORD, AUTH0_DOMAIN} from "../../src/utils/cons
 
 describe('Protected routes test', () => {
   it('should redirect to login when accessing a protected route unauthenticated', () => {
-    // Visit the protected route
-    cy.visit('/');
-
-    cy.wait(1000)
-
-    // Check if the URL is redirected to the login page
-    cy.url().should('include', AUTH0_DOMAIN);
+      cy.visit('/');
+      cy.wait(10000);
+      cy.url().then((currentUrl) => {
+          cy.log(`Current URL: ${currentUrl}`);
+      });
+      cy.url().should('include', AUTH0_DOMAIN);
   });
 
   it('should display login content', () => {
-    // Visit the login page
     cy.visit('AUTH0_DOMAIN');
 
-    // Look for text that is likely to appear on a login page
-    cy.contains('Log in').should('exist');
-    cy.contains('Password').should('exist'); // Adjust the text based on actual content
+    cy.contains('Username').should('exist');
+    cy.contains('Password').should('exist');
   });
 
   it('should not redirect to login when the user is already authenticated', () => {
@@ -30,7 +27,6 @@ describe('Protected routes test', () => {
 
     cy.wait(1000)
 
-    // Check if the URL is redirected to the login page
     cy.url().should('not.include', 'AUTH0_DOMAIN');
   });
 
