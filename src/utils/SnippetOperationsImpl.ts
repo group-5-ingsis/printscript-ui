@@ -361,7 +361,7 @@ export class SnippetOperationsImpl implements SnippetOperations{
 
     async removeTestCase(id: string): Promise<string> {
         const token = await this.getToken();
-        const url = `${this.SNIPPETS_BASE_URL}/test`;
+        const url = `${this.SNIPPETS_BASE_URL}/test/${id}`;
         try {
             const response = await fetch(url, {
                 method: 'DELETE',
